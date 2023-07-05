@@ -5,7 +5,7 @@ import { PostType, UsersType } from "@/type";
 import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
-
+import { notFound } from "next/navigation";
 type Params = {
   params: { userId: string };
 };
@@ -15,6 +15,9 @@ export async function generateMetadata({
 }: Params): Promise<Metadata> {
   const gettingUser: Promise<UsersType> = getUser(userId);
   const userData = await gettingUser;
+  if (!userData.name) {
+    return notFound();
+  }
   return {
     title: userData.name,
     description: `Detailed page of ${userData.name}`,

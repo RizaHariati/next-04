@@ -24,9 +24,15 @@ export default async function getUserPosts(
   // baru dia fetch ulang. Kalo ada data yang diubah sebelum 60 detik, dia akan
   // pakai data yang lama.
 
+  // if (!res.ok) {
+  //   throw new Error("Fetching data Failed");
+  // } ini untuk error yang normal
+
   if (!res.ok) {
-    throw new Error("Fetching data Failed");
+    undefined;
   }
+  // ini untuk page kalau mau pakai noFound() dari next/Navigation
+
   const data = await res.json();
   return data;
 }
