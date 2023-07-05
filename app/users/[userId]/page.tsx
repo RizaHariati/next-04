@@ -1,3 +1,4 @@
+import getAllUsers from "@/lib/getAllUsers";
 import getUser from "@/lib/getUser";
 import getUserPosts from "@/lib/getUserPosts";
 import { PostType, UsersType } from "@/type";
@@ -45,7 +46,6 @@ export default async function SingleUser({ params: { userId } }: Params) {
         return (
           <Link key={post.id} href={`users/${userId}/post/${post.id}`}>
             <p className="capitalize hover:font-bold hover:text-slate-950 transition-all">
-              {" "}
               {post.title}
             </p>
           </Link>
@@ -60,3 +60,18 @@ export default async function SingleUser({ params: { userId } }: Params) {
     </div>
   );
 }
+
+export async function generateStaticParams() {
+  const gettingUser: Promise<UsersType[]> = getAllUsers();
+  const userData = await gettingUser;
+  return userData.map((user) => ({
+    userId: user.id.toString(),
+  }));
+}
+
+// menggunakan generateStaticParams pages akan dibuild SEMUA di server.
+// dalam jumlah besar bisa jadi akan agak lebih lama untuk diloading
+// bisa diatasi dengan loading page. Ingat ini otomatis akan force cache
+// artinya setiap masuk page ini, akan dibuild semuanya, berulang2
+
+// generateStaticParams bisa mengembalikan array of objects karena kalau hanya satu itu namanya page doang
